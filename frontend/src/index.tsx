@@ -7,7 +7,7 @@ function MyButton({ title }: { title: string }) {
   );
 }
 
-export default function MyApp() {
+export default function App() {
   return (
     <div>
       <h1>Smart Voice Assistant</h1>
@@ -21,4 +21,4 @@ const container = document.getElementById('root');
 
 // Create a root and render your MyApp component
 const root = createRoot(container);
-root.render(<MyApp />);
+root.render(<App />);
