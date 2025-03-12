@@ -1,0 +1,7 @@
+{
+    "compilerOptions": {
+      "lib": ["dom", "esnext"], // Ensure 'dom' is included
+      "jsx": "preserve"        // Set jsx to 'preserve'
+      // Add any other compiler options you need here
+    }
+  }
