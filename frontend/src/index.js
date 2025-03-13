@@ -1,4 +1,3 @@
-import ReactDOM from 'react-dom/client';
 import * as React from 'react';
 
 //import for dashboard
@@ -12,13 +11,14 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import SmartToyIcon from '@mui/icons-material/SmartToy';
 
+
 //import for the button
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import KeyboardVoiceIcon from '@mui/icons-material/KeyboardVoice';
 
 
-export default function BasicButtons() {
+export default function RecordingButtons() {  // For connecting the onlick function and backend, user recording
   return (
     <Stack>
       <Button variant="outlined" sx={{ width: '100%' }} startIcon={<KeyboardVoiceIcon />}></Button>
@@ -26,6 +26,18 @@ export default function BasicButtons() {
   );
 }
 
+export default function BoxForChat() {  // For connecting with backend, get the data and show
+  return (
+    <Box component="section"
+      sx={{
+        width: '100%',
+        border: '5px dashed grey'
+      }}
+    >
+      Hello world! 
+    </Box>
+  );
+}
 
 
 const NAVIGATION = [
@@ -60,8 +72,9 @@ function DashBoardContent({ pathname }) {
     case '/currentchatboard':
       content = (
         <Box>
-          <Typography variant="h4">Hello</Typography>
-          <Typography>This is the content for the current page.</Typography>
+          <Typography><BoxForChat /></Typography>
+          <br />
+          <RecordingButtons />
         </Box>
       );
       break;
@@ -69,7 +82,8 @@ function DashBoardContent({ pathname }) {
       content = (
         <Box>
           <Typography variant="h4">New Caht</Typography>
-          <Typography>This is the content for the New Chat page.</Typography>
+          <Typography><BoxForChat /></Typography>
+          <RecordingButtons />
         </Box>
       );
       break;
@@ -94,10 +108,9 @@ function DashBoardContent({ pathname }) {
     <Box
       sx={{
         py: 4,
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        textAlign: 'center',
+
+
+
       }}
     >
       {content}
