@@ -1,7 +1,8 @@
 import * as React from 'react';
+import { useState } from 'react';
 
 //import for dashboard
-import { extendTheme, styled } from '@mui/material/styles';
+import { extendTheme } from '@mui/material/styles';
 import ChatIcon from '@mui/icons-material/Chat';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import HistoryIcon from '@mui/icons-material/History';
@@ -16,12 +17,28 @@ import SmartToyIcon from '@mui/icons-material/SmartToy';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import KeyboardVoiceIcon from '@mui/icons-material/KeyboardVoice';
+import RadioButtonCheckedIcon from '@mui/icons-material/RadioButtonChecked';
+
+
+
 
 
 export default function RecordingButtons() {  // For connecting the onlick function and backend, user recording
+  const [isRecording, setIsRecording] = useState(false);
+
+  const handleButtonClick = () => {   // Connect the recording system
+    setIsRecording((prev) => !prev);
+  };
+
   return (
     <Stack>
-      <Button variant="outlined" sx={{ width: '100%' }} startIcon={<KeyboardVoiceIcon />}></Button>
+      <Button
+        variant="outlined"
+        sx={{ width: '100%' }}
+        startIcon={isRecording ? <RadioButtonCheckedIcon /> : <KeyboardVoiceIcon />}
+        onClick={handleButtonClick}>
+        {isRecording ? 'Recording...' : 'Start Recording'}
+      </Button>
     </Stack>
   );
 }
@@ -31,16 +48,16 @@ export default function BoxForChat() {  // For connecting with backend, get the 
     <Box component="section"
       sx={{
         width: '100%',
-        border: '5px dashed grey'
+        border: '3px dashed grey'
       }}
     >
-      Hello world! 
+      Hello world!
     </Box>
   );
 }
 
 
-const NAVIGATION = [
+const NAVIGATION = [  // Dashboard item name
   {
     kind: 'header',
     title: 'Main items',
@@ -65,7 +82,7 @@ const NAVIGATION = [
   },
 ];
 
-function DashBoardContent({ pathname }) {
+function DashBoardContent({ pathname }) {   // Dashboard content
   // Conditionally render content based on the pathname
   let content;
   switch (pathname) {
@@ -106,19 +123,14 @@ function DashBoardContent({ pathname }) {
 
   return (
     <Box
-      sx={{
-        py: 4,
-
-
-
-      }}
+      sx={{ py: 4, }}
     >
       {content}
     </Box>
   );
 }
 
-const demoTheme = extendTheme({
+const demoTheme = extendTheme({     // Change the theme
   colorSchemes: { light: true, dark: true },
   colorSchemeSelector: 'class',
   breakpoints: {
@@ -132,7 +144,7 @@ const demoTheme = extendTheme({
   },
 });
 
-function useDemoRouter(initialPath) {
+function useDemoRouter(initialPath) {   // Set up the original page
   const [pathname, setPathname] = React.useState(initialPath);
 
   const router = React.useMemo(() => {
@@ -146,12 +158,6 @@ function useDemoRouter(initialPath) {
   return router;
 }
 
-const Skeleton = styled('div')(({ theme, height }) => ({
-  backgroundColor: theme.palette.action.hover,
-  borderRadius: theme.shape.borderRadius,
-  height,
-  content: '" "',
-}));
 
 export default function DashboardLayoutBasic(props) {
   const router = useDemoRouter('/currentchatboard');
