@@ -65,8 +65,8 @@ router.post("/audio", upload.single("audio"), async (req, res): Promise<any> => 
       //   mimetype: req.file.mimetype,
       //   path: req.file.path,
       // },
-      transcription: llm,
-      url_audio: audioUrl,
+      transcription: "this is testing testing testing",
+      url_audio: "/audio-responses/response-1742044993856.mp3",
     });
   } catch (error) {
     console.error("Error handling audio upload:", error);
