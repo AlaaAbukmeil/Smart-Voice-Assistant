@@ -3,7 +3,7 @@ import { Request, Response } from "express";
 import multer from "multer";
 import path from "path";
 import fs from "fs";
-import { generateSpeechWithGoogle, processWithVertexAI, transcribeWithGoogleSpeech } from "./main";
+// import { generateSpeechWithGoogle, processWithVertexAI, transcribeWithGoogleSpeech } from "./main";
 const express = require("express");
 
 const router = Router();
@@ -49,13 +49,13 @@ router.post("/audio", upload.single("audio"), async (req, res): Promise<any> => 
       return res.status(400).json({ error: "No audio file uploaded" });
     }
     // let path_test = "/Users/alaaabukmeil/Desktop/csci3280/backend/uploads/audio-1742041930487-6160692.webm"
-    let transcription = await transcribeWithGoogleSpeech(req.file.path, "webm");
-    let llm = await processWithVertexAI(transcription);
+    // let transcription = await transcribeWithGoogleSpeech(req.file.path, "webm");
+    // let llm = await processWithVertexAI(transcription);
     const filename = "response-" + Date.now() + ".mp3";
     const rootDir = path.resolve(__dirname, "../"); // Go up one level from dist
     const audioPath = path.join(rootDir, "audio-responses", filename);
 
-    let speech = await generateSpeechWithGoogle(llm, audioPath);
+    // let speech = await generateSpeechWithGoogle(llm, audioPath);
     const audioUrl = `/audio-responses/${filename}`;
     res.status(200).json({
       message: "Audio received successfully!",

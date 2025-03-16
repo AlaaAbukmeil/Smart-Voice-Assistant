@@ -1,6 +1,21 @@
 import React, { useState, useRef, useEffect } from "react";
 import { baseUrl, baseUrlWOS } from "../../common/cookie";
 
+//import icon
+import ChatIcon from '@mui/icons-material/Chat';
+import OpenInNewIcon from '@mui/icons-material/OpenInNew';
+import HistoryIcon from '@mui/icons-material/History';
+
+//
+import { createTheme } from '@mui/material/styles';
+import { AppProvider } from '@toolpad/core/AppProvider';
+import { DashboardLayout } from '@toolpad/core/DashboardLayout';
+
+
+
+
+
+
 const AudioRecorder: React.FC = () => {
   const [isRecording, setIsRecording] = useState<boolean>(false);
   const [audioURL, setAudioURL] = useState<string | null>(null);
@@ -242,7 +257,68 @@ const AudioRecorder: React.FC = () => {
       setError(`MP3 playback error: ${err.message}`);
     });
   };
+
+  const NAVIGATION = [
+    {
+      kind: "header" as const, // Explicitly set the type to "header"
+      title: "Main items",
+    },
+    {
+      kind: "page" as const, // Explicitly set the type to "page"
+      segment: "currentchatboard",
+      title: "Current chat board",
+      icon: <ChatIcon />,
+    },
+    {
+      kind: "page" as const, // Explicitly set the type to "page"
+      segment: "newchat",
+      title: "New chat",
+      icon: <OpenInNewIcon />,
+    },
+    {
+      kind: "divider" as const, // Explicitly set the type to "divider"
+    },
+    {
+      kind: "page" as const, // Explicitly set the type to "page"
+      segment: "history",
+      title: "History",
+      icon: <HistoryIcon />,
+    },
+  ];
+
+const demoTheme = createTheme({
+  cssVariables: {
+    colorSchemeSelector: 'data-toolpad-color-scheme',
+  },
+  colorSchemes: { light: true, dark: true },
+  breakpoints: {
+    values: {
+      xs: 0,
+      sm: 600,
+      md: 600,
+      lg: 1200,
+      xl: 1536,
+    },
+  },
+});
+
+
+
+
+
+
+
+
+
+
+
   return (
+    <AppProvider
+      navigation={NAVIGATION}
+      theme={demoTheme}
+    >
+      <DashboardLayout>
+      
     <div className="audio-recorder">
       <h2>Audio Recorder</h2>
 
@@ -273,6 +349,8 @@ const AudioRecorder: React.FC = () => {
         </div>
       )}
     </div>
+    </DashboardLayout>
+    </AppProvider>
   );
 };
 
