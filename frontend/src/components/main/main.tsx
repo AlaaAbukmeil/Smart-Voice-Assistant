@@ -5,18 +5,24 @@ import { baseUrl, baseUrlWOS } from "../../common/cookie";
 import ChatIcon from '@mui/icons-material/Chat';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import HistoryIcon from '@mui/icons-material/History';
+import SmartToyIcon from '@mui/icons-material/SmartToy';
+
 
 //
 import { createTheme } from '@mui/material/styles';
-import { AppProvider } from '@toolpad/core/AppProvider';
+import Box from '@mui/material/Box';
+import path from "path";
+import { AppProvider } from '@toolpad/core'
+import { AppBar, Toolbar, IconButton, Typography, Button, List, ListItem, ListItemButton, ListItemText } from '@mui/material';
 import { DashboardLayout } from '@toolpad/core/DashboardLayout';
+import { ThemeProvider } from "styled-components";
+import Brightness4Icon from '@mui/icons-material/Brightness4'; // Moon icon for dark mode
+import Brightness7Icon from '@mui/icons-material/Brightness7'; // Sun icon for light mode
 
 
 
 
-
-
-const AudioRecorder: React.FC = () => {
+const PageDesign: React.FC = () => {
   const [isRecording, setIsRecording] = useState<boolean>(false);
   const [audioURL, setAudioURL] = useState<string | null>(null);
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
@@ -29,6 +35,13 @@ const AudioRecorder: React.FC = () => {
   const [responseAudioUrl, setResponseAudioUrl] = useState<any>(null);
   const [isAudioPlaying, setIsAudioPlaying] = useState(false);
   const audioRef = useRef(null);
+  const [themeMode, setThemeMode] = useState('light'); // State to track theme mode
+
+  const toggleTheme = () => {
+    setThemeMode((prevMode) => (prevMode === 'light' ? 'dark' : 'light'));
+  };
+
+
 
   // Clean up resources
   const cleanupResources = () => {
@@ -186,7 +199,7 @@ const AudioRecorder: React.FC = () => {
         if (result.url_audio) {
           const fullAudioUrl = result.url_audio;
           console.log("Received MP3 audio URL from server:", fullAudioUrl);
-          const fullUrl = `${baseUrlWOS}${fullAudioUrl}` 
+          const fullUrl = `${baseUrlWOS}${fullAudioUrl}`
 
           setResponseAudioUrl(fullUrl);
           playMP3Audio(fullUrl);
@@ -258,100 +271,112 @@ const AudioRecorder: React.FC = () => {
     });
   };
 
-  const NAVIGATION = [
-    {
-      kind: "header" as const, // Explicitly set the type to "header"
-      title: "Main items",
+  const Sidebar = () => {
+    return (
+      <List>
+        <ListItem disablePadding>
+          <ListItemButton onClick={() => console.log('New Chat clicked')}>
+            <ListItemText primary="New Chat" />
+          </ListItemButton>
+        </ListItem>
+        <ListItem disablePadding>
+          <ListItemButton onClick={() => console.log('History clicked')}>
+            <ListItemText primary="History" />
+          </ListItemButton>
+        </ListItem>
+      </List>
+    );
+  };
+
+  const lightTheme = createTheme({
+    palette: {
+      mode: 'light',
+      primary: {
+        main: '#1976d2', // Blue
+      },
+      background: {
+        default: '#ffffff', // White
+        paper: '#f5f5f5', // Light gray
+      },
+      text: {
+        primary: '#000000', // Black text
+        secondary: 'rgba(0, 0, 0, 0.7)', // Slightly transparent black text
+      },
     },
-    {
-      kind: "page" as const, // Explicitly set the type to "page"
-      segment: "currentchatboard",
-      title: "Current chat board",
-      icon: <ChatIcon />,
+  });
+
+  const darkTheme = createTheme({
+    palette: {
+      mode: 'dark',
+      primary: {
+        main: '#90caf9', // Light blue
+      },
+      background: {
+        default: '#121212', // Dark gray
+        paper: '#1e1e1e', // Slightly lighter dark gray
+      },
+      text: {
+        primary: '#ffffff', // White text
+        secondary: 'rgba(255, 255, 255, 0.7)', // Slightly transparent white text
+      },
     },
-    {
-      kind: "page" as const, // Explicitly set the type to "page"
-      segment: "newchat",
-      title: "New chat",
-      icon: <OpenInNewIcon />,
-    },
-    {
-      kind: "divider" as const, // Explicitly set the type to "divider"
-    },
-    {
-      kind: "page" as const, // Explicitly set the type to "page"
-      segment: "history",
-      title: "History",
-      icon: <HistoryIcon />,
-    },
-  ];
-
-const demoTheme = createTheme({
-  cssVariables: {
-    colorSchemeSelector: 'data-toolpad-color-scheme',
-  },
-  colorSchemes: { light: true, dark: true },
-  breakpoints: {
-    values: {
-      xs: 0,
-      sm: 600,
-      md: 600,
-      lg: 1200,
-      xl: 1536,
-    },
-  },
-});
-
-
-
-
-
-
-
-
-
+  });
 
 
   return (
-    <AppProvider
-      navigation={NAVIGATION}
-      theme={demoTheme}
-    >
-      <DashboardLayout>
-      
-    <div className="audio-recorder">
-      <h2>Audio Recorder</h2>
+    <ThemeProvider theme={themeMode === 'light' ? lightTheme : darkTheme}>
+      <main style={{ backgroundColor: themeMode === 'light' ? '#ffffff' : '#121212', minHeight: '100vh' }}>
+        <div>
+          <AppBar position="static" >
+            <Toolbar>
+              <IconButton edge="start" color="inherit" aria-label="menu">
+                <SmartToyIcon />
+              </IconButton>
+              <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                Smart Voice Assistant
+              </Typography>
 
-      <div className="controls">
-        {!isRecording ? <button onClick={startRecording}>Start Recording</button> : <button onClick={stopRecording}>Stop Recording</button>}
+              <IconButton color="inherit" onClick={toggleTheme}>
+                {themeMode === 'light' ? <Brightness4Icon /> : <Brightness7Icon />}
+              </IconButton>
 
-        <button onClick={sendToBackend} disabled={audioChunksRef.current.length === 0}>
-          Send to Server
-        </button>
-      </div>
+            </Toolbar>
+          </AppBar>
 
-      {audioURL && (
-        <div className="audio-playback">
-          <h3>Recording Preview:</h3>
-          <audio src={audioURL} controls />
         </div>
-      )}
-      {responseAudioUrl && (
-        <div className="mp3-player">
-          <h3>Response Audio:</h3>
-          <audio ref={audioRef} src={responseAudioUrl} controls preload="auto" onPlay={() => setIsAudioPlaying(true)} onPause={() => setIsAudioPlaying(false)} onEnded={() => setIsAudioPlaying(false)} />
+        <div className="audio-recorder">
+          <h2>Audio Recorder</h2>
+
+          <div className="controls">
+            {!isRecording ? <button onClick={startRecording}>Start Recording</button> : <button onClick={stopRecording}>Stop Recording</button>}
+
+            <button onClick={sendToBackend} disabled={audioChunksRef.current.length === 0}>
+              Send to Server
+            </button>
+          </div>
+
+          {audioURL && (
+            <div className="audio-playback">
+              <h3>Recording Preview:</h3>
+              <audio src={audioURL} controls />
+            </div>
+          )}
+          {responseAudioUrl && (
+            <div className="mp3-player">
+              <h3>Response Audio:</h3>
+              <audio ref={audioRef} src={responseAudioUrl} controls preload="auto" onPlay={() => setIsAudioPlaying(true)} onPause={() => setIsAudioPlaying(false)} onEnded={() => setIsAudioPlaying(false)} />
+            </div>
+          )}
+          {transcription && (
+            <div className="transcription">
+              <h3>Transcription:</h3>
+              <p>{transcription}</p>
+            </div>
+          )}
         </div>
-      )}
-      {transcription && (
-        <div className="transcription">
-          <h3>Transcription:</h3>
-          <p>{transcription}</p>
-        </div>
-      )}
-    </div>
-    </DashboardLayout>
-    </AppProvider>
+      </main>
+    </ThemeProvider>
   );
 };
 
-export default AudioRecorder;
+export default PageDesign;
