@@ -6,6 +6,7 @@ import ChatIcon from '@mui/icons-material/Chat';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import HistoryIcon from '@mui/icons-material/History';
 import SmartToyIcon from '@mui/icons-material/SmartToy';
+import HomeIcon from '@mui/icons-material/Home';
 
 
 //
@@ -40,7 +41,7 @@ const PageDesign: React.FC = () => {
   const toggleTheme = () => {
     setThemeMode((prevMode) => (prevMode === 'light' ? 'dark' : 'light'));
   };
-
+  const [activePage, setActivePage] = useState<'main' | 'newChat' | 'history'>('main'); // State to track active page
 
 
   // Clean up resources
@@ -273,18 +274,29 @@ const PageDesign: React.FC = () => {
 
   const Sidebar = () => {
     return (
-      <List>
-        <ListItem disablePadding>
-          <ListItemButton onClick={() => console.log('New Chat clicked')}>
-            <ListItemText primary="New Chat" />
-          </ListItemButton>
-        </ListItem>
-        <ListItem disablePadding>
-          <ListItemButton onClick={() => console.log('History clicked')}>
-            <ListItemText primary="History" />
-          </ListItemButton>
-        </ListItem>
-      </List>
+      <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2 }}>
+        <Button
+          variant={'contained'} // Highlight active button
+          startIcon={<HomeIcon />}
+          onClick={() => setActivePage('main')}
+        >
+          Main
+        </Button>
+        <Button
+          variant={'contained'} // Highlight active button
+          startIcon={<ChatIcon />}
+          onClick={() => setActivePage('newChat')}
+        >
+          New Chat
+        </Button>
+        <Button
+          variant={'contained'} // Highlight active button
+          startIcon={<HistoryIcon />}
+          onClick={() => setActivePage('history')}
+        >
+          History
+        </Button>
+      </Box>
     );
   };
 
@@ -322,29 +334,15 @@ const PageDesign: React.FC = () => {
     },
   });
 
+  const MainPage = () => {
+    return (
+      <div>
+        <h1>Main Page</h1>
+        <p>Welcome to the Smart Voice Assistant!</p>
+        
 
-  return (
-    <ThemeProvider theme={themeMode === 'light' ? lightTheme : darkTheme}>
-      <main style={{ backgroundColor: themeMode === 'light' ? '#ffffff' : '#121212', minHeight: '100vh' }}>
-        <div>
-          <AppBar position="static" >
-            <Toolbar>
-              <IconButton edge="start" color="inherit" aria-label="menu">
-                <SmartToyIcon />
-              </IconButton>
-              <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                Smart Voice Assistant
-              </Typography>
-
-              <IconButton color="inherit" onClick={toggleTheme}>
-                {themeMode === 'light' ? <Brightness4Icon /> : <Brightness7Icon />}
-              </IconButton>
-
-            </Toolbar>
-          </AppBar>
-
-        </div>
         <div className="audio-recorder">
+
           <h2>Audio Recorder</h2>
 
           <div className="controls">
@@ -373,6 +371,55 @@ const PageDesign: React.FC = () => {
               <p>{transcription}</p>
             </div>
           )}
+        </div>
+        <p></p>
+      </div>
+    );
+  };
+  
+  
+  const NewChatPage = () => {
+    return (
+      <div>
+        <h2>New Chat Page</h2>
+        <p>This is the new chat page. Start a new conversation here.</p>
+      </div>
+    );
+  };
+  
+  const HistoryPage = () => {
+    return (
+      <div>
+        <h2>History Page</h2>
+        <p>View your chat history here.</p>
+      </div>
+    );
+  };
+  
+
+  return (
+    <ThemeProvider theme={themeMode === 'light' ? lightTheme : darkTheme}>
+      <main style={{ backgroundColor: themeMode === 'light' ? '#ffffff' : '#121212', minHeight: '100vh' }}>
+        <div>
+          <AppBar position="static" >
+            <Toolbar>
+              <IconButton edge="start" color="inherit" aria-label="menu">
+                <SmartToyIcon />
+              </IconButton>
+              <Typography variant="h5" component="div" sx={{ flexGrow: 1 }}>
+                Smart Voice Assistant
+              </Typography>
+              <Sidebar />
+              <IconButton color="inherit" onClick={toggleTheme}>
+                {themeMode === 'light' ? <Brightness4Icon /> : <Brightness7Icon />}
+              </IconButton>
+            </Toolbar>
+          </AppBar>
+        </div>
+        <div className="container-fluid">
+          {activePage === 'main' && <MainPage />}
+          {activePage === 'newChat' && <NewChatPage />}
+          {activePage === 'history' && <HistoryPage />}
         </div>
       </main>
     </ThemeProvider>
