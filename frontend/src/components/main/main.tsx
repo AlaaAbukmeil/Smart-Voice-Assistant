@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { baseUrl, baseUrlWOS } from "../../common/cookie";
 
-const AudioRecorder: React.FC = () => {
+const AudioRecorder = ({ onTranscriptionUpdate }: any) => {
   const [isRecording, setIsRecording] = useState<boolean>(false);
   const [audioURL, setAudioURL] = useState<string | null>(null);
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
@@ -171,11 +171,10 @@ const AudioRecorder: React.FC = () => {
         if (result.url_audio) {
           const fullAudioUrl = result.url_audio;
           console.log("Received MP3 audio URL from server:", fullAudioUrl);
-          const fullUrl = `${baseUrlWOS}${fullAudioUrl}` 
-
+          const fullUrl = `${baseUrlWOS}${fullAudioUrl}`;
+          onTranscriptionUpdate && onTranscriptionUpdate(result.transcription);
           setResponseAudioUrl(fullUrl);
           playMP3Audio(fullUrl);
-
         }
       } else if (result.message) {
         setTranscription(`Server message: ${result.message}`);

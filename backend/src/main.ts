@@ -22,7 +22,7 @@ const vertexAI = new VertexAI({
   location: process.env.GOOGLE_LOCATION as string,
 });
 const generativeModel = vertexAI.getGenerativeModel({
-  model: 'gemini-pro',
+  model: 'gemini-2.0-flash-001',
   generation_config: {
     max_output_tokens: 1024,
     temperature: 0.4,

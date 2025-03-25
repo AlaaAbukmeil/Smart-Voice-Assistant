@@ -9,7 +9,8 @@ backend/civic-capsule-377812-fe65c9a8054e.json
 # Production
 **/build
 **/dist
-
+backend/uploads
+backend/audio-responses
 # Environment variables
 **/.env
 **/.env.local

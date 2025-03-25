@@ -1,12 +1,12 @@
 import { createBrowserRouter } from "react-router-dom";
 import ErrorPage from "../common/errorPage";
-import AudioRecorder from "../components/main/main";
+import VoiceAssistant from "../components/main/frontend";
 
 const router = createBrowserRouter([
   
   {
     path: "/",
-    element: <AudioRecorder />,
+    element: <VoiceAssistant />,
     errorElement: <ErrorPage />,
   }
 ]);
